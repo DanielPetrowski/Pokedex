@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pokédex</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="init()">
+
+<header>
+    <nav>
+        <div class="main-header">
+            <div class="header-logo">
+                <img src="" alt="logo" />
+                <h2>My Pokédex</h2>
+            </div>
+            <input
+                type="text"
+                placeholder="Search Pokémon (min. 3 letters)"
+                class="input-header"
+                id="searchInput"
+                oninput="onFilterInput()"
+            />
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="poke-name" id="poke-name"></div>
+    <div class="button">
+        <button id="loadMoreBtn" onclick="loadMorePokemon()">Mehr Laden</button>
+    </div>
+</main>
+
+<footer>
+    <h2>powered by Daniel Petrowski</h2>
+</footer>
+
+<!-- Ladeanzeige -->
+<div id="loadingScreen" class="loading-screen" style="display: none;">
+    <div class="loading-text">Loading...</div>
+</div>
+<div id="detail-overlay" class="overlay" style="display: none;" onclick="closeDetailOverlay()"></div>
+
+<script src="template.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

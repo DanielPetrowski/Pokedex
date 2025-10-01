@@ -1,0 +1,209 @@
+/* Allgemeines */
+body {
+    background-color: #060943;
+    margin: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #121782;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+
+.input-header {
+    background-color: #121782;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.input-header::placeholder {
+    color: white;
+}
+
+/* Pokémon Karten */
+.poke-name {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+.card {
+    background-color: #811bff;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+/* Detailansicht */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.detail-card {
+    width: 320px;          /* feste Breite */
+    height: 480px;         /* feste Höhe */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    overflow: hidden;      /* damit nichts herausragt */
+    position: relative;
+    text-align: center;
+    box-sizing: border-box; /* Padding zählt zur Größe */
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+}
+
+.arrow-btns {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    font-size: 24px;
+}
+
+.arrow-btns span {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Button */
+.button {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.button button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    background-color: #aa66e1;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.button button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+/* Footer */
+footer {
+    background-color: #121782;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Ladebildschirm */
+.loading-screen {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.loading-text {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.detail-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 16px;
+}
+
+/* Responsive Layouts */
+@media (max-width: 320px) {
+    .poke-name {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 321px) and (max-width: 768px) {
+    .poke-name {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .poke-name {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .poke-name {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (min-width: 1441px) {
+    .poke-name {
+        grid-template-columns: repeat(6, 1fr);
+        max-width: 1440px;
+        margin: auto;
+    }
+}
