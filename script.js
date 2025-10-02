@@ -162,11 +162,6 @@ async function openDetailView(pokeUrl) {
 function showDetailOverlay(data) {
     document.body.style.overflow = "hidden";
 
-    let types = getTypesAsText(data);
-    let hp = data.stats[0].base_stat;
-    let attack = data.stats[1].base_stat;
-    let defense = data.stats[2].base_stat;
-
     let overlay = document.getElementById("detail-overlay");
     if (!overlay) return;
 
