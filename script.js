@@ -5,6 +5,7 @@ let filteredMode = false;
 let filteredList = [];
 let currentDetailRef = null;
 
+
 async function init() {
     toggleLoading(true);
 
@@ -25,7 +26,6 @@ async function loadPokemonDetails(url) {
     let response = await fetch(url);
     return await response.json();
 }
-
 async function loadMorePokemon() {
     if (isLoading || filteredMode) return;
 
@@ -40,7 +40,6 @@ async function loadMorePokemon() {
     currentIndex += nextPokemons.length;
     toggleLoading(false);
 }
-
 async function loadAndRenderPokemons(pokemonList) {
     for (let i = 0; i < pokemonList.length; i++) {
         let pokemon = pokemonList[i];
@@ -49,16 +48,7 @@ async function loadAndRenderPokemons(pokemonList) {
     }
 }
 
-function renderPokemonCard(dataDetails, pokeRef) {
-    let container = document.getElementById("poke-name");
-    if (!container) return;
 
-    let types = getTypesAsText(dataDetails);
-    let firstType = dataDetails.types[0].type.name;
-    let bgColor = getTypeColor(firstType);
-
-    container.innerHTML += getPokemonCardTemplate(dataDetails, pokeRef, bgColor, types);
-}
 
 function toggleLoading(show) {
     let loading = document.getElementById("loadingScreen");
@@ -70,6 +60,12 @@ function toggleLoading(show) {
     setLoadMoreButtonState(!show && !filteredMode);
 }
 
+
+function clearCards() {
+    let cont = document.getElementById("poke-name");
+    if (cont) cont.innerHTML = "";
+}
+
 function setLoadMoreButtonState(enabled) {
     let btn = document.getElementById("loadMoreBtn");
     if (btn) {
@@ -77,6 +73,17 @@ function setLoadMoreButtonState(enabled) {
     }
 }
 
+
+function renderPokemonCard(dataDetails, pokeRef) {
+    let container = document.getElementById("poke-name");
+    if (!container) return;
+
+    let types = getTypesAsText(dataDetails);
+    let firstType = dataDetails.types[0].type.name;
+    let bgColor = getTypeColor(firstType);
+
+    container.innerHTML += getPokemonCardTemplate(dataDetails, pokeRef, bgColor, types);
+}
 function getTypesAsText(pokemonData) {
     let result = "";
     for (let i = 0; i < pokemonData.types.length; i++) {
@@ -86,22 +93,7 @@ function getTypesAsText(pokemonData) {
     return result;
 }
 
-function getTypeColor(type) {
-    let typeColors = {
-        normal: "#A8A77A", fire: "#EE8130", water: "#6390F0", electric: "#F7D02C",
-        grass: "#7AC74C", ice: "#96D9D6", fighting: "#C22E28", poison: "#A33EA1",
-        ground: "#E2BF65", flying: "#A98FF3", psychic: "#F95587", bug: "#A6B91A",
-        rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC", dark: "#705746",
-        steel: "#B7B7CE", fairy: "#D685AD"
-    };
 
-    return typeColors[type] || "#777";
-}
-
-function clearCards() {
-    let cont = document.getElementById("poke-name");
-    if (cont) cont.innerHTML = "";
-}
 
 async function onFilterInput() {
     let inputElem = document.getElementById("searchInput");
