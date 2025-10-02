@@ -16,7 +16,7 @@ function getDetailOverlayTemplate(data, abilitiesText, movesListHTML) {
     let defense = data.stats[2].base_stat;
 
     return `
-        <div class="detail-card" onclick="event.stopPropagation()">
+        <div class="detail-card" onclick="event.stopPropagation()"> 
             <span class="close-btn" onclick="closeDetailOverlay()">×</span>
 
             <div class="header">
@@ -64,6 +64,12 @@ function getDetailOverlayTemplate(data, abilitiesText, movesListHTML) {
         </div>
     `;
 }
+// onclick="event.stopPropagation() wird benutzt um am element zu bleiben 
+// lt Google  wenn: Du ein Popup, Modal oder Overlay hast. Du willst, dass ein Klick im inneren Bereich (z. B. auf der Karte) nicht das Schließen des Popups auslöst.
+// Du aber trotzdem erlauben willst, dass ein Klick außerhalb das Popup schließt.
+
+
+
 
 function getTypeColor(type) {
     let typeColors = {

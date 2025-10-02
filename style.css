@@ -1,4 +1,12 @@
 /* Allgemeines */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
     background-color: #060943;
     margin: 0;
@@ -7,6 +15,10 @@ body {
 }
 
 /* Header */
+
+main {
+    flex: 1;
+}
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -28,6 +40,7 @@ body {
     color: white;
     padding: 8px;
     border-radius: 4px;
+    width: 30%;
 }
 
 .input-header::placeholder {
@@ -89,6 +102,7 @@ body {
     position: relative;
     text-align: center;
     box-sizing: border-box; /* Padding zählt zur Größe */
+    margin: 0;
 }
 
 .close-btn {
@@ -145,7 +159,7 @@ footer {
     padding: 10px;
     position: relative;
     bottom: 0;
-    width: 100%;
+    width: auto;
 }
 
 /* Ladebildschirm */
@@ -176,15 +190,15 @@ footer {
 }
 
 /* Responsive Layouts */
-@media (max-width: 320px) {
+@media (max-width: 322px) {
     .poke-name {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 
-@media (min-width: 321px) and (max-width: 768px) {
+@media   (min-width: 768px) {
     .poke-name {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
