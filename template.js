@@ -9,7 +9,7 @@ function getPokemonCardTemplate(dataDetails, pokeRef, bgColor) {
     `;
 }
 
-function getDetailOverlayTemplate(data) {
+function getDetailOverlayTemplate(data, abilitiesText, movesListHTML) {
     let types = getTypesAsText(data);
     let hp = data.stats[0].base_stat;
     let attack = data.stats[1].base_stat;
@@ -18,12 +18,45 @@ function getDetailOverlayTemplate(data) {
     return `
         <div class="detail-card" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeDetailOverlay()">×</span>
-            <h2>${data.name.toUpperCase()} (#${data.id})</h2>
-            <img src="${data.sprites.front_default}" alt="${data.name}" />
-            <p><strong>Typ:</strong> ${types}</p>
-            <p><strong>HP:</strong> ${hp}</p>
-            <p><strong>Attack:</strong> ${attack}</p>
-            <p><strong>Defense:</strong> ${defense}</p>
+
+            <div class="header">
+                <h2>${data.name.toUpperCase()} <span class="poke-id">#${data.id}</span></h2>
+                <div class="types">${types}</div>
+                <img src="${data.sprites.front_default}" alt="${data.name}" />
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('about')">About</button>
+                <button class="tab-btn" onclick="switchTab('stats')">Base Stats</button>
+                <button class="tab-btn" onclick="switchTab('evolution')">Evolution</button>
+                <button class="tab-btn" onclick="switchTab('moves')">Moves</button>
+            </div>
+
+            <div class="tab-content" id="tab-about">
+                <p><strong>Height:</strong> ${(data.height / 10).toFixed(1)} m</p>
+                <p><strong>Weight:</strong> ${(data.weight / 10).toFixed(1)} kg</p>
+                <p><strong>Abilities:</strong> ${abilitiesText}</p>
+            </div>
+
+            <div class="tab-content" id="tab-stats" style="display: none;">
+                <p><strong>HP:</strong> ${hp}</p>
+                <p><strong>Attack:</strong> ${attack}</p>
+                <p><strong>Defense:</strong> ${defense}</p>
+                <p><strong>Speed:</strong> ${data.stats[5].base_stat}</p>
+                <p><strong>Sp. Atk:</strong> ${data.stats[3].base_stat}</p>
+                <p><strong>Sp. Def:</strong> ${data.stats[4].base_stat}</p>
+            </div>
+
+            <div class="tab-content" id="tab-evolution" style="display: none;">
+                <p>Loading evolution...</p>
+            </div>
+
+            <div class="tab-content" id="tab-moves" style="display: none;">
+                <ul>
+                    ${movesListHTML}
+                </ul>
+            </div>
+
             <div class="arrow-btns">
                 <span onclick="navigateDetail(-1)">←</span>
                 <span onclick="navigateDetail(1)">→</span>
@@ -43,5 +76,3 @@ function getTypeColor(type) {
 
     return typeColors[type] || "#777";
 }
-
-

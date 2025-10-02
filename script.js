@@ -5,7 +5,6 @@ let filteredMode = false;
 let filteredList = [];
 let currentDetailRef = null;
 
-
 async function init() {
     toggleLoading(true);
 
@@ -26,6 +25,7 @@ async function loadPokemonDetails(url) {
     let response = await fetch(url);
     return await response.json();
 }
+
 async function loadMorePokemon() {
     if (isLoading || filteredMode) return;
 
@@ -40,6 +40,7 @@ async function loadMorePokemon() {
     currentIndex += nextPokemons.length;
     toggleLoading(false);
 }
+
 async function loadAndRenderPokemons(pokemonList) {
     for (let i = 0; i < pokemonList.length; i++) {
         let pokemon = pokemonList[i];
@@ -47,8 +48,6 @@ async function loadAndRenderPokemons(pokemonList) {
         renderPokemonCard(data, pokemon);
     }
 }
-
-
 
 function toggleLoading(show) {
     let loading = document.getElementById("loadingScreen");
@@ -59,7 +58,6 @@ function toggleLoading(show) {
     isLoading = show;
     setLoadMoreButtonState(!show && !filteredMode);
 }
-
 
 function clearCards() {
     let cont = document.getElementById("poke-name");
@@ -73,7 +71,6 @@ function setLoadMoreButtonState(enabled) {
     }
 }
 
-
 function renderPokemonCard(dataDetails, pokeRef) {
     let container = document.getElementById("poke-name");
     if (!container) return;
@@ -84,6 +81,7 @@ function renderPokemonCard(dataDetails, pokeRef) {
 
     container.innerHTML += getPokemonCardTemplate(dataDetails, pokeRef, bgColor, types);
 }
+
 function getTypesAsText(pokemonData) {
     let result = "";
     for (let i = 0; i < pokemonData.types.length; i++) {
@@ -92,8 +90,6 @@ function getTypesAsText(pokemonData) {
     }
     return result;
 }
-
-
 
 async function onFilterInput() {
     let inputElem = document.getElementById("searchInput");
@@ -157,8 +153,24 @@ function showDetailOverlay(data) {
     let overlay = document.getElementById("detail-overlay");
     if (!overlay) return;
 
+    // --- Logik: Abilities als Text
+    let abilitiesText = '';
+    for (let i = 0; i < data.abilities.length; i++) {
+        if (i > 0) abilitiesText += ', ';
+        abilitiesText += data.abilities[i].ability.name;
+    }
+
+    // --- Logik: Moves als <li>
+    let movesListHTML = '';
+    let count = 0;
+    for (let i = 0; i < data.moves.length; i++) {
+        if (count >= 5) break;
+        movesListHTML += '<li>' + data.moves[i].move.name + '</li>';
+        count++;
+    }
+
     overlay.style.display = "flex";
-    overlay.innerHTML = getDetailOverlayTemplate(data);
+    overlay.innerHTML = getDetailOverlayTemplate(data, abilitiesText, movesListHTML);
 }
 
 function closeDetailOverlay() {
@@ -190,4 +202,29 @@ async function navigateDetail(direction) {
 
     let data = await loadPokemonDetails(newRef.url);
     showDetailOverlay(data);
+}
+
+// Tab-Funktion sichtbar machen
+function switchTab(tabId) {
+    let tabs = document.querySelectorAll('.tab-content');
+    let buttons = document.querySelectorAll('.tab-btn');
+
+    for (let i = 0; i < tabs.length; i++) {
+        tabs[i].style.display = 'none';
+    }
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('active');
+    }
+
+    let activeTab = document.getElementById('tab-' + tabId);
+    if (activeTab) {
+        activeTab.style.display = 'block';
+    }
+
+    let tabButtons = document.querySelectorAll('.tab-btn');
+    for (let i = 0; i < tabButtons.length; i++) {
+        if (tabButtons[i].textContent.toLowerCase().includes(tabId)) {
+            tabButtons[i].classList.add('active');
+        }
+    }
 }
