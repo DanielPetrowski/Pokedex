@@ -5,7 +5,7 @@ let filteredMode = false;
 let filteredList = [];
 let currentDetailRef = null;
 
-async function init() {
+async function init() {  // startet seite holt alle daten aus api die ersten 20 pokemon werden gerendert 
     toggleLoading(true);
 
     let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0");
@@ -21,12 +21,12 @@ async function init() {
     toggleLoading(false);
 }
 
-async function loadPokemonDetails(url) {
+async function loadPokemonDetails(url) {// detail daten vom einzelnen Pokemon
     let response = await fetch(url);
     return await response.json();
 }
 
-async function loadMorePokemon() {
+async function loadMorePokemon() { // lädt neue 20 pokemon 
     if (isLoading || filteredMode) return;
 
     toggleLoading(true);
@@ -41,7 +41,7 @@ async function loadMorePokemon() {
     toggleLoading(false);
 }
 
-async function loadAndRenderPokemons(pokemonList) {
+async function loadAndRenderPokemons(pokemonList) { // lädt detaildaten von api
     for (let i = 0; i < pokemonList.length; i++) {
         let pokemon = pokemonList[i];
         let data = await loadPokemonDetails(pokemon.url);
@@ -49,7 +49,7 @@ async function loadAndRenderPokemons(pokemonList) {
     }
 }
 
-function toggleLoading(show) {
+function toggleLoading(show) {  // aktiviert oder deaktiviert Ladebildschirm
     let loading = document.getElementById("loadingScreen");
     if (loading) {
         loading.style.display = show ? "flex" : "none";
@@ -59,19 +59,19 @@ function toggleLoading(show) {
     setLoadMoreButtonState(!show && !filteredMode);
 }
 
-function clearCards() {
+function clearCards() { 
     let cont = document.getElementById("poke-name");
     if (cont) cont.innerHTML = "";
 }
 
-function setLoadMoreButtonState(enabled) {
+function setLoadMoreButtonState(enabled) { // aktiviert oder deaktiviert button zum mehr laden
     let btn = document.getElementById("loadMoreBtn");
     if (btn) {
         btn.disabled = !enabled;
     }
 }
 
-function renderPokemonCard(dataDetails, pokeRef) {
+function renderPokemonCard(dataDetails, pokeRef) { // zeigt Pokemonkarte an 
     let container = document.getElementById("poke-name");
     if (!container) return;
 
@@ -82,7 +82,7 @@ function renderPokemonCard(dataDetails, pokeRef) {
     container.innerHTML += getPokemonCardTemplate(dataDetails, pokeRef, bgColor, types);
 }
 
-function getTypesAsText(pokemonData) {
+function getTypesAsText(pokemonData) { // erstellt komma getrennten string 
     let result = "";
     for (let i = 0; i < pokemonData.types.length; i++) {
         if (i > 0) result += ", ";
@@ -91,7 +91,7 @@ function getTypesAsText(pokemonData) {
     return result;
 }
 
-async function onFilterInput() {
+async function onFilterInput() {// aktiviert suche bei 3 zeichen und zeigt passende ergebnisse an 
     let inputElem = document.getElementById("searchInput");
     if (!inputElem) return;
 
@@ -130,7 +130,7 @@ function findPokemonByUrl(list, url) {
     return null;
 }
 
-async function openDetailView(pokeUrl) {
+async function openDetailView(pokeUrl) { // zeigt details an für Pokemon
     toggleLoading(true);
 
     let list = filteredMode ? filteredList : allPokemonList;
@@ -147,20 +147,20 @@ async function openDetailView(pokeUrl) {
     showDetailOverlay(data);
 }
 
-function showDetailOverlay(data) {
+function showDetailOverlay(data) { // deaktiviert scrollen haupseite,zeigt fähigkeiten an 
     document.body.style.overflow = "hidden";
 
     let overlay = document.getElementById("detail-overlay");
     if (!overlay) return;
 
-    // --- Logik: Abilities als Text
+    
     let abilitiesText = '';
     for (let i = 0; i < data.abilities.length; i++) {
         if (i > 0) abilitiesText += ', ';
         abilitiesText += data.abilities[i].ability.name;
     }
 
-    // --- Logik: Moves als <li>
+  
     let movesListHTML = '';
     let count = 0;
     for (let i = 0; i < data.moves.length; i++) {
@@ -173,7 +173,7 @@ function showDetailOverlay(data) {
     overlay.innerHTML = getDetailOverlayTemplate(data, abilitiesText, movesListHTML);
 }
 
-function closeDetailOverlay() {
+function closeDetailOverlay() { // verstekt overlay aktiviert scrollen
     let overlay = document.getElementById("detail-overlay");
     if (overlay) {
         overlay.style.display = "none";
@@ -204,7 +204,7 @@ async function navigateDetail(direction) {
     showDetailOverlay(data);
 }
 
-// Tab-Funktion sichtbar machen
+
 function switchTab(tabId) {
     let tabs = document.querySelectorAll('.tab-content');
     let buttons = document.querySelectorAll('.tab-btn');
