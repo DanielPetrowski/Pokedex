@@ -36,11 +36,12 @@ main {
 
 .input-header {
     background-color: #121782;
-    border: none;
+    margin-top: 10px;
     color: white;
     padding: 8px;
     border-radius: 4px;
     width: 30%;
+    text-align: right;
 }
 
 .input-header::placeholder {
@@ -86,23 +87,42 @@ main {
     justify-content: center;
     align-items: center;
     z-index: 999;
+
+    /* Scrollbar, falls Inhalt zu groß */
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .detail-card {
-    width: 320px;          /* feste Breite */
-    height: 67%;         /* feste Höhe */
+    width: 320px;
+    height: 67%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     background-color: white;
-    padding: 20px;
     border-radius: 12px;
-    overflow: hidden;      /* damit nichts herausragt */
-    position: relative;
-    text-align: center;
-    box-sizing: border-box; /* Padding zählt zur Größe */
+    padding: 20px;
+    box-sizing: border-box;
     margin: 0;
+    max-height: 100%;
+    max-width: 600px;
+    position: relative;
+}
+
+/* Scrollbarer Inhaltsbereich */
+.detail-card-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    text-align: center;
+}
+
+/* Pfeile immer unten */
+.arrow-btns {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 10px;
 }
 
 .close-btn {
@@ -112,21 +132,6 @@ main {
     font-size: 24px;
     cursor: pointer;
     color: black;
-}
-
-.arrow-btns {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    font-size: 24px;
-}
-
-.arrow-btns span {
-    cursor: pointer;
-    user-select: none;
 }
 
 /* Button */
@@ -189,6 +194,12 @@ footer {
     margin-bottom: 16px;
 }
 
+.no-results{
+    text-align: center;
+    color: white;
+    font-size: 20px;
+}
+
 /* Responsive Layouts */
 @media (max-width: 322px) {
     .poke-name {
@@ -196,9 +207,20 @@ footer {
     }
 }
 
-@media   (min-width: 768px) {
+@media (min-width: 768px) {
     .poke-name {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:500px){
+    .search{
+        flex-direction: column;
+        display: flex;
+        padding-left: 10px;
+    }
+    .search-btn{
+        width: 50%;
     }
 }
 
@@ -221,6 +243,7 @@ footer {
         margin: auto;
     }
 }
+
 .tabs {
     display: flex;
     justify-content: space-around;

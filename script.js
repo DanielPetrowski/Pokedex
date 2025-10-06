@@ -5,7 +5,7 @@ let filteredMode = false;
 let filteredList = [];
 let currentDetailRef = null;
 
-async function init() {  // startet seite holt alle daten aus api die ersten 20 pokemon werden gerendert 
+async function init() {
     toggleLoading(true);
 
     let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0");
@@ -21,12 +21,12 @@ async function init() {  // startet seite holt alle daten aus api die ersten 20 
     toggleLoading(false);
 }
 
-async function loadPokemonDetails(url) {// detail daten vom einzelnen Pokemon
+async function loadPokemonDetails(url) {
     let response = await fetch(url);
     return await response.json();
 }
 
-async function loadMorePokemon() { // lädt neue 20 pokemon 
+async function loadMorePokemon() {
     if (isLoading || filteredMode) return;
 
     toggleLoading(true);
@@ -41,7 +41,7 @@ async function loadMorePokemon() { // lädt neue 20 pokemon
     toggleLoading(false);
 }
 
-async function loadAndRenderPokemons(pokemonList) { // lädt detaildaten von api
+async function loadAndRenderPokemons(pokemonList) {
     for (let i = 0; i < pokemonList.length; i++) {
         let pokemon = pokemonList[i];
         let data = await loadPokemonDetails(pokemon.url);
@@ -49,7 +49,7 @@ async function loadAndRenderPokemons(pokemonList) { // lädt detaildaten von api
     }
 }
 
-function toggleLoading(show) {  // aktiviert oder deaktiviert Ladebildschirm
+function toggleLoading(show) {
     let loading = document.getElementById("loadingScreen");
     if (loading) {
         loading.style.display = show ? "flex" : "none";
@@ -59,19 +59,19 @@ function toggleLoading(show) {  // aktiviert oder deaktiviert Ladebildschirm
     setLoadMoreButtonState(!show && !filteredMode);
 }
 
-function clearCards() { 
+function clearCards() {
     let cont = document.getElementById("poke-name");
     if (cont) cont.innerHTML = "";
 }
 
-function setLoadMoreButtonState(enabled) { // aktiviert oder deaktiviert button zum mehr laden
+function setLoadMoreButtonState(enabled) {
     let btn = document.getElementById("loadMoreBtn");
     if (btn) {
         btn.disabled = !enabled;
     }
 }
 
-function renderPokemonCard(dataDetails, pokeRef) { // zeigt Pokemonkarte an 
+function renderPokemonCard(dataDetails, pokeRef) {
     let container = document.getElementById("poke-name");
     if (!container) return;
 
@@ -82,7 +82,7 @@ function renderPokemonCard(dataDetails, pokeRef) { // zeigt Pokemonkarte an
     container.innerHTML += getPokemonCardTemplate(dataDetails, pokeRef, bgColor, types);
 }
 
-function getTypesAsText(pokemonData) { // erstellt komma getrennten string 
+function getTypesAsText(pokemonData) {
     let result = "";
     for (let i = 0; i < pokemonData.types.length; i++) {
         if (i > 0) result += ", ";
@@ -91,34 +91,51 @@ function getTypesAsText(pokemonData) { // erstellt komma getrennten string
     return result;
 }
 
-async function onFilterInput() {// aktiviert suche bei 3 zeichen und zeigt passende ergebnisse an 
+async function onSearchClick() {
     let inputElem = document.getElementById("searchInput");
     if (!inputElem) return;
 
     let input = inputElem.value.trim().toLowerCase();
 
     if (input.length < 3) {
-        filteredMode = false;
-        clearCards();
-        currentIndex = 0;
-        await loadMorePokemon();
+        await resetToUnfilteredView();
         return;
     }
 
+    await showFilteredResults(input);
+}
+
+async function resetToUnfilteredView() {
+    filteredMode = false;
+    clearCards();
+    currentIndex = 0;
+    await loadMorePokemon();
+}
+
+async function showFilteredResults(searchTerm) {
     filteredMode = true;
     clearCards();
     toggleLoading(true);
-    filteredList = [];
 
-    for (let i = 0; i < allPokemonList.length; i++) {
-        let name = allPokemonList[i].name.toLowerCase();
-        let match = name.includes(input);
-        if (match) filteredList.push(allPokemonList[i]);
+    filteredList = allPokemonList.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchTerm)
+    );
+
+    if (filteredList.length === 0) {
+        showNoResultsMessage();
+    } else {
+        await loadAndRenderPokemons(filteredList);
     }
 
-    await loadAndRenderPokemons(filteredList);
     setLoadMoreButtonState(false);
     toggleLoading(false);
+}
+
+function showNoResultsMessage() {
+    let container = document.getElementById("poke-name");
+    if (container) {
+        container.innerHTML = `<div class="no-results">no-results.</div>`;
+    }
 }
 
 function findPokemonByUrl(list, url) {
@@ -130,7 +147,7 @@ function findPokemonByUrl(list, url) {
     return null;
 }
 
-async function openDetailView(pokeUrl) { // zeigt details an für Pokemon
+async function openDetailView(pokeUrl) {
     toggleLoading(true);
 
     let list = filteredMode ? filteredList : allPokemonList;
@@ -147,20 +164,18 @@ async function openDetailView(pokeUrl) { // zeigt details an für Pokemon
     showDetailOverlay(data);
 }
 
-function showDetailOverlay(data) { // deaktiviert scrollen haupseite,zeigt fähigkeiten an 
+function showDetailOverlay(data) {
     document.body.style.overflow = "hidden";
 
     let overlay = document.getElementById("detail-overlay");
     if (!overlay) return;
 
-    
     let abilitiesText = '';
     for (let i = 0; i < data.abilities.length; i++) {
         if (i > 0) abilitiesText += ', ';
         abilitiesText += data.abilities[i].ability.name;
     }
 
-  
     let movesListHTML = '';
     let count = 0;
     for (let i = 0; i < data.moves.length; i++) {
@@ -173,7 +188,7 @@ function showDetailOverlay(data) { // deaktiviert scrollen haupseite,zeigt fähi
     overlay.innerHTML = getDetailOverlayTemplate(data, abilitiesText, movesListHTML);
 }
 
-function closeDetailOverlay() { // verstekt overlay aktiviert scrollen
+function closeDetailOverlay() {
     let overlay = document.getElementById("detail-overlay");
     if (overlay) {
         overlay.style.display = "none";
@@ -204,7 +219,6 @@ async function navigateDetail(direction) {
     showDetailOverlay(data);
 }
 
-
 function switchTab(tabId) {
     let tabs = document.querySelectorAll('.tab-content');
     let buttons = document.querySelectorAll('.tab-btn');
@@ -228,5 +242,3 @@ function switchTab(tabId) {
         }
     }
 }
-
-

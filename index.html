@@ -16,13 +16,16 @@
                 <img src="./img/pokeball.png" alt="Pokédex Logo" />
                 <h2>My Pokédex</h2>
             </div>
-            <input
+            <div class="search">
+            <button class="search-btn" onclick="onSearchClick()">search</button>
+            <input 
                 type="text"
-                placeholder="Search Name"
+                placeholder="3.char"
                 class="input-header"
                 id="searchInput"
                 oninput="onFilterInput()"
             />
+            </div>
         </div>
     </nav>
 </header>
@@ -30,7 +33,7 @@
 <main>
     <div class="poke-name" id="poke-name"></div>
     <div class="button">
-        <button id="loadMoreBtn" onclick="loadMorePokemon()">Mehr Laden</button>
+        <button id="loadMoreBtn" onclick="loadMorePokemon()">more</button>
     </div>
 </main>
 
